@@ -1,13 +1,17 @@
-FROM openjdk:17-jdk as builder
+# 빌드 단계
+FROM openjdk:17-jdk AS builder
 
 WORKDIR /app
 
 COPY . .
 
 RUN chmod +x ./gradlew
-RUN ./gradlew build -x test  # 테스트를 건너뛰고 빌드
+RUN ./gradlew build -x test
 
+# 실행 단계
 FROM openjdk:17-jdk
+
+WORKDIR /app
 
 COPY --from=builder /app/build/libs/*.jar app.jar
 
